@@ -11,10 +11,15 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
+    "axios": "^1.7.7",
     "next": "14.2.16",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-dropzone": "^14.2.10",
+    "react-select": "^5.8.2",
+    "react-toastify": "^10.0.6"
   },
   "devDependencies": {
     "eslint": "^8",
