@@ -3,54 +3,75 @@ import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import CustomButton from "./CustomButton";
+import languagesData from "../data/seamless_language.json";
 
 const TextToSpeech = ({ selectedLanguage, transcribedText, setDownloadJobId }) => {
   const [processing, setProcessing] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/ai/model`,
-        {
-          params: {
-            model_name: "seamless-m4t-large",
-            skip: 0,
-            limit: 1,
-          },
-          headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${process.env.ApiToken}`,
-          },
-        }
-      );
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/ai/model`,
+  //       {
+  //         params: {
+  //           model_name: "seamless-m4t-large",
+  //           skip: 0,
+  //           limit: 1,
+  //         },
+  //         headers: {
+  //           accept: "application/json",
+  //           Authorization: `Bearer ${process.env.ApiToken}`,
+  //         },
+  //       }
+  //     );
 
-      console.log("Languages Fetched Successfully", response.data[0].languages);
+  //     console.log("Languages Fetched Successfully", response.data[0].languages);
 
-      if (Array.isArray(response.data) && response.data.length > 0) {
-        const modelSpecificLanguages = response.data[0].languages;
-        const checkLanguage = modelSpecificLanguages.find((lang) => {
-          return lang.lang_code === selectedLanguage;
-        });
-        if (!checkLanguage) {
-          console.log("language not supported");
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Language not supported for this task, Please choose another language',
-            position: 'top-end',
-            toast: true,
-            showConfirmButton: false,
-            timer: 3000
-          });
-          setProcessing(false);
-          return false;
-        } else {
-          return true;
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching languages:", error);
-    }
+  //     if (Array.isArray(response.data) && response.data.length > 0) {
+  //       const modelSpecificLanguages = response.data[0].languages;
+  //       const checkLanguage = modelSpecificLanguages.find((lang) => {
+  //         return lang.lang_code === selectedLanguage;
+  //       });
+  //       if (!checkLanguage) {
+  //         console.log("language not supported");
+  //         Swal.fire({
+  //           icon: 'error',
+  //           title: 'Error',
+  //           text: 'Language not supported for this task, Please choose another language',
+  //           position: 'top-end',
+  //           toast: true,
+  //           showConfirmButton: false,
+  //           timer: 3000
+  //         });
+  //         setProcessing(false);
+  //         return false;
+  //       } else {
+  //         return true;
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching languages:", error);
+  //   }
+  // };
+
+  const checkLanguageSupport = () => {
+    const languageExists = languagesData.some((language) => language.lang_code === selectedLanguage);
+    
+    if (!languageExists) {
+      console.log("Language not supported");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Language not supported for this task. Please choose another language.',
+        position: 'top-end',
+        toast: true,
+        showConfirmButton: false,
+        timer: 3000
+      });
+      setProcessing(false);
+      return false;
+    } 
+    return true;
   };
 
   const checkJobStatus = async (jobId) => {
@@ -117,8 +138,8 @@ const TextToSpeech = ({ selectedLanguage, transcribedText, setDownloadJobId }) =
     try {
       setProcessing(true);
       setDownloadJobId(null);
-      const checkLanguageSupport = await fetchData();
-      if (!checkLanguageSupport) {
+      const languageSupported = checkLanguageSupport();
+      if (!languageSupported) {
         setProcessing(false);
         return;
       }
