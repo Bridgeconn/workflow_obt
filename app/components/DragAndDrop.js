@@ -1,16 +1,25 @@
-// DragAndDrop.js
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Box } from "@mui/material";
 
-const DragAndDrop = ({ onAudioFileChange }) => {
+const DragAndDrop = ({ onAudioFileChange, audioFile }) => {
+  const [fileName, setFileName] = useState("");
+
+  useEffect(() => {
+    if (audioFile) {
+      setFileName(audioFile.name);
+    } else {
+      setFileName("");
+    }
+  }, [audioFile]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: { "audio/*": [] },
     onDrop: (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file) {
-        console.log("Dropped audio file:", file);
+        setFileName(file.name);
         onAudioFileChange(file);
       }
     },
@@ -40,7 +49,11 @@ const DragAndDrop = ({ onAudioFileChange }) => {
       {isDragActive ? (
         <p style={{ color: "#00796b" }}>Drop the audio file here...</p>
       ) : (
-        <p>Drag and drop your audio file here, or click to select</p>
+        <p>
+          {fileName
+            ? `Uploaded File: ${fileName}`
+            : "Drag and drop your audio file here, or click to select"}
+        </p>
       )}
     </Box>
   );

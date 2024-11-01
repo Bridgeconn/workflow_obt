@@ -1,19 +1,21 @@
-"use client"; // This converts the component to a Client Component
+"use client";
 import { Container, Box } from "@mui/material";
 import AudioUpload from "./components/AudioUpload";
 import LanguageDropdown from "./components/LanguageDropdown";
 import DragAndDrop from "./components/DragAndDrop";
-import CustomButton from "./components/CustomButton";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import AudioTranscription from "./components/AudioTranscription";
 import TranscribeTextArea from "./components/TranscribeTextarea";
+import TextToSpeech from "./components/TextToSpeech";
+import DownloadJob from "./components/DownloadJob";
 
 export default function Home() {
   const [selectedAudioFile, setSelectedAudioFile] = useState(null);
   const [audioURL, setAudioURL] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [transcribedText, setTranscribedText] = useState("");
+  const [downloadJobId, setDownloadJobId] = useState(null);
   const audioRef = useRef(null);
 
   const handleAudioFileChange = (file) => {
@@ -31,15 +33,13 @@ export default function Home() {
     });
   };
 
-  console.log("Selected Audio File Type:", selectedAudioFile?.type);
-
   const handleLanguageChange = (language) => {
     setSelectedLanguage(language);
   };
 
   const handleDeleteAudioFile = () => {
     setSelectedAudioFile(null);
-    setAudioURL(""); // Clear the audio URL
+    setAudioURL("");
     audioRef.current.pause();
     audioRef.current.currentTime = 0;
     if (audioRef.current.src) {
@@ -67,6 +67,7 @@ export default function Home() {
         backgroundColor: "#EFEFEF",
       }}
     >
+
       <Box
         sx={{
           display: "flex",
@@ -94,7 +95,7 @@ export default function Home() {
           padding: 2,
           boxShadow: "none",
           background: "#DCDADA80",
-          marginTop: { xs: 2, sm: 4 }
+          marginTop: { xs: 2, sm: 4 },
         }}
       >
         <Box
@@ -104,7 +105,10 @@ export default function Home() {
             height: "200px",
           }}
         >
-          <DragAndDrop onAudioFileChange={handleAudioFileChange} />
+          <DragAndDrop
+            onAudioFileChange={handleAudioFileChange}
+            audioFile={selectedAudioFile}
+          />
         </Box>
         <Box sx={{ width: { xs: "100%", sm: "30%" }, padding: 2 }}>
           <audio
@@ -141,6 +145,7 @@ export default function Home() {
           </Box>
         </Box>
       </Box>
+
       <Box
         sx={{
           width: "100%",
@@ -163,19 +168,18 @@ export default function Home() {
             width: { xs: "100%", sm: "30%" },
             height: "100%",
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
             padding: 2,
           }}
         >
-          <CustomButton
-            variant="contained"
-            onClick={() => console.log("transcribed text", transcribedText)}
-          >
-            Text to Speech
-          </CustomButton>
+          <TextToSpeech
+            selectedLanguage={selectedLanguage}
+            transcribedText={transcribedText}
+            setDownloadJobId={setDownloadJobId}
+          />
         </Box>
       </Box>
+      <DownloadJob downloadJobId={downloadJobId} />
     </Container>
   );
 }

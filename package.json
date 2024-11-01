@@ -19,7 +19,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.10",
     "react-select": "^5.8.2",
-    "react-toastify": "^10.0.6"
+    "sweetalert2": "^11.14.4"
   },
   "devDependencies": {
     "eslint": "^8",
