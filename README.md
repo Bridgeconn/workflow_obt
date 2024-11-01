@@ -2,37 +2,56 @@
 
 Workflow UI for Oral bible translation (OBT) checking
 
+## Prerequisites
+
+Ensure you have the following installed on your machine:
+
+- **Node.js** (v18 or later)
+
 ## Getting Started
 
-First, run the development server:
+Follow these steps to set up the project locally:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the Repository**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   Open your terminal and run:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+   ```bash
+   https://github.com/Bridgeconn/workflow_obt.git
+   cd workflow_obt
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install Dependencies**
 
-## Learn More
+   Use npm to install the project dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Set Up Environment Variables**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Create a `.env` file in the root location of the project and add the following;
 
-## Deploy on Vercel
+   ```
+   NEXT_PUBLIC_BASE_URL=<your_base_url>
+   ApiToken=<your_api_token>
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Run the Development Server**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Start the Next.js development server with:
+
+   ```bash
+   npm run dev
+   ```
+
+5. **Access the Application**
+
+   Open your web browser and go to [http://localhost:3000](http://localhost:3000) to see your application running.
+
+## Scripts
+
+- **Development**: `npm run dev` or `yarn dev` - Start the development server.
+- **Build**: `npm run build` or `yarn build` - Build the application for production.
+- **Start**: `npm start` or `yarn start` - Start the production server after building.
