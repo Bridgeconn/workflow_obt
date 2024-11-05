@@ -1,54 +1,56 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Select from "react-select";
 import { CircularProgress, Box } from "@mui/material";
+import languages from "../data/seamless_language.json"
 
 const LanguageDropdown = ({ onLanguageChange }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const [loadingLanguages, setLoadingLanguages] = useState(true);
-  const [languages, setLanguages] = useState([]);
+  const [loadingLanguages, setLoadingLanguages] = useState(false);
+  // const [languages, setLanguages] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = async () => {
-    try {
-      setLoadingLanguages(true);
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/ai/model`,
-        {
-          params: {
-            model_name: "mms-1b-all",
-            skip: 0,
-            limit: 1,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.ApiToken}`,
-          },
-        }
-      );
+  // const fetchData = async () => {
+  //   try {
+  //     setLoadingLanguages(true);
+  //     const response = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/ai/model`,
+  //       {
+  //         params: {
+  //           model_name: "mms-1b-all",
+  //           skip: 0,
+  //           limit: 1,
+  //         },
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${process.env.ApiToken}`,
+  //         },
+  //       }
+  //     );
 
-      if (Array.isArray(response.data) && response.data.length > 0) {
-        setLanguages(response.data[0].languages);
-      } else {
-        setLanguages([]);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLanguages([]);
-    } finally {
-      setLoadingLanguages(false);
-    }
-  };
+  //     if (Array.isArray(response.data) && response.data.length > 0) {
+  //       setLanguages(response.data[0].languages);
+  //     } else {
+  //       setLanguages([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setLanguages([]);
+  //   } finally {
+  //     setLoadingLanguages(false);
+  //   }
+  // };
 
   const handleLanguageChange = (selectedOption) => {
     setSelectedLanguage(selectedOption);
     onLanguageChange(selectedOption.value);
   };
 
+  //hardcoding and limiting the languages supported by seamless-m4t-large for speech output. It can be changed later.
   const options = languages.map((language) => ({
     value: language.lang_code,
     label: language.lang_name,

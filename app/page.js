@@ -1,14 +1,23 @@
 "use client";
-import { Container, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import AudioUpload from "./components/AudioUpload";
 import LanguageDropdown from "./components/LanguageDropdown";
 import DragAndDrop from "./components/DragAndDrop";
 import { useRef, useState } from "react";
-import Image from "next/image";
 import AudioTranscription from "./components/AudioTranscription";
 import TranscribeTextArea from "./components/TranscribeTextarea";
 import TextToSpeech from "./components/TextToSpeech";
 import DownloadJob from "./components/DownloadJob";
+import {
+  ContainerStyled,
+  InputBoxStyled,
+  TranscribeContainer,
+  DragAndDropStyled,
+  AudioControlContainer,
+  TextToSpeechContainer,
+  TTSButtonContainerStyled,
+  ImageStyled,
+} from "./components/StyledComponents";
 
 export default function Home() {
   const [selectedAudioFile, setSelectedAudioFile] = useState(null);
@@ -28,9 +37,6 @@ export default function Home() {
     const newAudioURL = URL.createObjectURL(file);
     setAudioURL(newAudioURL);
     audioRef.current.src = newAudioURL;
-    audioRef.current.play().catch((error) => {
-      console.error("Error playing audio:", error);
-    });
   };
 
   const handleLanguageChange = (language) => {
@@ -53,64 +59,20 @@ export default function Home() {
   };
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-        overflow: "hidden",
-        minWidth: "100vw",
-        padding: 0,
-        margin: 0,
-        backgroundColor: "#EFEFEF",
-      }}
-    >
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: "center",
-          justifyContent: "center",
-          gap: { xs: 2, sm: 8 },
-          width: "100%",
-          padding: 2,
-          boxShadow: "none",
-        }}
-      >
+    <ContainerStyled>
+      <InputBoxStyled>
         <AudioUpload onAudioFileChange={handleAudioFileChange} />
         <LanguageDropdown onLanguageChange={handleLanguageChange} />
-      </Box>
+      </InputBoxStyled>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: "flex-start",
-          justifyContent: "center",
-          gap: 2,
-          width: "100%",
-          padding: 2,
-          boxShadow: "none",
-          background: "#DCDADA80",
-          marginTop: { xs: 2, sm: 4 },
-        }}
-      >
-        <Box
-          sx={{
-            width: { xs: "100%", sm: "50%" },
-            padding: 2,
-            height: "200px",
-          }}
-        >
+      <TranscribeContainer>
+        <DragAndDropStyled>
           <DragAndDrop
             onAudioFileChange={handleAudioFileChange}
             audioFile={selectedAudioFile}
           />
-        </Box>
-        <Box sx={{ width: { xs: "100%", sm: "30%" }, padding: 2 }}>
+        </DragAndDropStyled>
+        <AudioControlContainer>
           <audio
             ref={audioRef}
             controls
@@ -129,57 +91,38 @@ export default function Home() {
               gap: 4,
             }}
           >
-            <Image
+            <ImageStyled
               src="/images/trashIcon.svg"
               alt="TrashIcon"
               width={30}
               height={30}
               onClick={handleDeleteAudioFile}
-              style={{ cursor: "pointer" }}
             />
             <AudioTranscription
+              onAudioFileChange={handleAudioFileChange}
               selectedAudioFile={selectedAudioFile}
               selectedLanguage={selectedLanguage}
               onTranscriptionComplete={handleTranscriptionComplete}
             />
           </Box>
-        </Box>
-      </Box>
+        </AudioControlContainer>
+      </TranscribeContainer>
 
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: "flex-start",
-          justifyContent: "center",
-          gap: 2,
-          padding: 2,
-          boxShadow: "none",
-        }}
-      >
+      <TextToSpeechContainer>
         <TranscribeTextArea
           transcribedText={transcribedText}
           setTranscribedText={setTranscribedText}
         />
 
-        <Box
-          sx={{
-            width: { xs: "100%", sm: "30%" },
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            padding: 2,
-          }}
-        >
+        <TTSButtonContainerStyled>
           <TextToSpeech
             selectedLanguage={selectedLanguage}
             transcribedText={transcribedText}
             setDownloadJobId={setDownloadJobId}
           />
-        </Box>
-      </Box>
+        </TTSButtonContainerStyled>
+      </TextToSpeechContainer>
       <DownloadJob downloadJobId={downloadJobId} />
-    </Container>
+    </ContainerStyled>
   );
 }
